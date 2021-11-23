@@ -1,0 +1,13 @@
+﻿<form id='eform' class='xg-form'>
+	@await Component.InvokeAsync("XiHide", new XiHideDto{ Fid = "Id" })
+	
+	@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "姓名", Fid = "Name", MaxLen = 30 })
+	@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "手機", Fid = "Phone", MaxLen = 15 })
+	@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "Email", Fid = "Email", MaxLen = 100 })
+	@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "地址", Fid = "Address", MaxLen = 255, Cols = "2,6" })
+	@await Component.InvokeAsync("XiRead", new XiReadDto{ Title = "建檔日期", Fid = "Created" })
+	@await Component.InvokeAsync("XiRead", new XiReadDto{ Title = "異動日期", Fid = "Revised" })
+</form>
+
+@await Component.InvokeAsync("XgSaveBack")
+

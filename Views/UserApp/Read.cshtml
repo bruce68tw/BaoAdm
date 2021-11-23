@@ -1,0 +1,38 @@
+﻿<script src="~/js/view/UserApp.js"></script>
+<script type="text/javascript">
+    $(function () {
+        _me.init();
+    });
+</script>
+
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { "手機用戶管理" } })
+<div class="xp-prog">
+    <div id="divRead">
+		<form id='formRead' class='xg-form'>
+			<div class="row">
+				@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "姓名", Fid = "Name", MaxLen = 30, InRow = true })
+				@await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto{  })
+			</div>
+			@await Component.InvokeAsync("XiText", new XiTextDto{ Title = "手機", Fid = "Phone", MaxLen = 15 })
+        </form>
+
+		<div class='xg-btns-box'>
+        </div>
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>手機</th>
+                    <th>Email</th>
+                    <th>建檔日期</th>
+                    <th width='80px'>維護</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="divEdit" class="xg-hide">
+        <partial name="Edit" />
+    </div>
+</div>

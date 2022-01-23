@@ -6,7 +6,11 @@ var _str = {
 
     //variables is empty or not
     isEmpty: function (str) {
-        return (str === undefined || str === null || str === '')
+        return (str === undefined || str === null || str === '');
+    },
+
+    notEmpty: function (str) {
+        return !_str.isEmpty(str);
     },
 
     //convert empty string to new string

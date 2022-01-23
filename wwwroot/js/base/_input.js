@@ -91,7 +91,7 @@ var _input = {
                 break;
             case 'read':
                 var format = obj.data('format');
-                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
+                if (_str.notEmpty(format) && _str.notEmpty(_BR[format]))
                     value = _date.mmToFormat(value, _BR[format]);
                 _iread.setO(obj, value);
                 break;
@@ -111,8 +111,20 @@ var _input = {
         return obj.data('type');
     },
 
+    /**
+     * get object
+     * param fid {string}
+     * param box {object}
+     * param ftype {string} optional
+     * return object
+     */
+    getObj: function (fid, box, ftype) {
+        ftype = ftype || _input.getType(_obj.get(fid, box));
+        return (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
+    },
 
-    //=== below is old && remark ===
+
+    //#region remark code
     /**
      * ??顯示欄位的錯誤訊息, fid欄位會直接加上 error className
      * 先找 error label, 再找上面相鄰的 object, 然後加入 xg-error
@@ -262,5 +274,6 @@ var _input = {
         //$('.' + _fun.errBoxCls).removeClass(_fun.errBoxCls);
     },
     */
+    //#endregion
 
 }; //class

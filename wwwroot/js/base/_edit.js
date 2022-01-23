@@ -41,26 +41,35 @@ var _edit = {
     },
     */
 
-    //called by: EditOne.js, EditMany.js
-    //not set mapId
+    /**
+     * get one updated row for New/Updated
+     * called by: EditOne.js, DbAdm MyCrud.js
+     * param kid {string} key fid
+     * param fidTypes {id-value array}
+     * param box {object} form object
+     * return json row
+     */ 
     getUpdRow: function (kid, fidTypes, box) {
         //if key empty then return row
+        var row = _form.toJson(box);
         var key = _input.get(kid, box);
         if (_str.isEmpty(key))
-            return _form.toJson(box);
+            return row;
 
         var diff = false;
-        var row = {};
+        var result = {};
         var fid, ftype, value, obj, old;
         for (var j = 0; j < fidTypes.length; j = j + 2) {
             //skip read only type
             ftype = fidTypes[j + 1];
-            if (ftype === 'link' || ftype === 'read')
-                continue;
+            //if (ftype === 'link' || ftype === 'read')
+            //    continue;
 
             fid = fidTypes[j];
-            obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
-            value = _input.getO(obj, box, ftype);
+            //obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
+            obj = _input.getObj(fid, box, ftype);
+            //value = _input.getO(obj, box, ftype);
+            value = row[fid];
             old = obj.data(_edit.DataOld);
             //if fully compare, string will not equal numeric !!
             if (value != old) {
@@ -69,15 +78,15 @@ var _edit = {
                     _date.mmToValue(value) === _date.mmToValue(old))
                     continue;
 
-                row[fid] = value;
+                result[fid] = value;
                 diff = true;
             }
         }
         if (!diff)
             return null;
 
-        row[kid] = key;
-        return row;
+        result[kid] = key;
+        return result;
     },
 
     /**
@@ -169,6 +178,7 @@ var _edit = {
         }
     },
 
+    //#region remark code
     /**
      * get field info array by box object & row filter
      * box {object} form/div container
@@ -223,5 +233,6 @@ var _edit = {
         return fidTypes;
     },
     */
+    //#endregion
 
 };

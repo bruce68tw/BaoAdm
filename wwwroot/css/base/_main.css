@@ -24,14 +24,6 @@
     height: 100%;
     /*font-size: 14px;*/
     /*margin: 0;*/
-    /*
-    border-style: solid;
-    border-color: #CCC;
-    border-width: 0 1px 0 0;
-    */
-    border: 1px solid #CCC;
-    border-top: none;
-    border-right: none;
     background: #FFFFFF;
     transition: 0.5s;
     z-index: 1000;

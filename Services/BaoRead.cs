@@ -6,22 +6,20 @@ using System.Threading.Tasks;
 
 namespace BaoAdm.Services
 {
-    public class UserCustRead
+    public class BaoRead
     {
         private readonly ReadDto dto = new()
         {
-            ReadSql = @"
-select *
-from dbo.UserCust
+            ReadSql = $@"
+select * from dbo.Bao
 order by Id
 ",
-            Items = new QitemDto[] {
-                new() { Fid = "Account", Op = ItemOpEstr.Like },
-                new() { Fid = "Name", Op = ItemOpEstr.Like },
+            Items = new [] {
+                new QitemDto { Fid = "Name", Op = ItemOpEstr.Like },
             },
         };
 
-        public async Task<JObject> GetPageAsync(string ctrl, DtDto dt)
+        public async Task<JObject> GetPage(string ctrl, DtDto dt)
         {
             return await new CrudRead().GetPageAsync(dto, dt, ctrl);
         }

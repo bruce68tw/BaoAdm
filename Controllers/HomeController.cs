@@ -71,7 +71,7 @@ where Account=@Account
 
             var userType = (!hasPwd) ? UserTypeEstr.NoPwd :
                 row["IsAdmin"].ToString() == "1" ? UserTypeEstr.Admin :
-                UserTypeEstr.NoPwd;
+                UserTypeEstr.Normal;
 
             #region 3.set base user info
             var userId = row["UserId"].ToString();

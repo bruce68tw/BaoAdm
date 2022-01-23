@@ -10,7 +10,7 @@ var _form = {
     toJson: function (form) {
         //skip link & read fields
         var json = {};
-        form.find(_fun.fidFilter()).filter(':not([data-type=link],[data-type=read])').each(function () {
+        form.find(_fun.fidFilter()).filter(':not(.xi-unsave)').each(function () {
             var obj = $(this);
             json[_fun.getFid(obj)] = _input.getO(obj, form);            
         });

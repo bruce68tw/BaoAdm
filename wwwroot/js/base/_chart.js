@@ -17,13 +17,63 @@ var _chart = {
     ],
 
     /**
-     * @description initial datatable(use jquery datatables)
-     * @param {object} canvasObj
-     * @param {string[]} labels
-     * @param {number[]} values
-     * @param {string[]} colors
-     * @param {json} config: custom config
-     * @return {Chart}
+     * show one line chart
+     * param divId {string}
+     * param rows {List<IdNumDto>}
+     * param color {string} 
+     */
+    line: function (canvasId, rows, color) {
+        var ids = [];
+        var values = [];
+        for (var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            ids[i] = row.Id;
+            values[i] = row.Num;
+        }
+        _chart.drawLine(canvasId, ids, values, color);
+    },
+
+    /**
+     * show one line chart, called Chart.js
+     */ 
+    drawLine: function (canvasId, ids, values, color) {
+        if (_chart._nowChart != null)
+            _chart._nowChart.destroy();
+
+        _chart._nowChart = new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: {
+                labels: ids,
+                datasets: [{
+                    //label: "Africa",
+                    data: values,
+                    borderColor: color,
+                    fill: false
+                }]
+            },
+            options: {
+                //legend: { display: false },
+                plugins: {
+                    legend: { display: false },
+                },
+                /*
+                title: {
+                    display: true,
+                    text: 'World population per region (in millions)'
+                }
+                */
+            }
+        });
+    },
+
+    /**
+     * initial datatable(use jquery datatables)
+     * param {object} canvasObj
+     * param {string[]} labels
+     * param {number[]} values
+     * param {string[]} colors
+     * param {json} config: custom config
+     * return {Chart}
      */
     initPie: function (canvasObj, labels, values, colors, config) {
 
@@ -67,50 +117,4 @@ var _chart = {
         return new Chart(canvasObj, config0);
     },
 
-    /**
-     * show one line chart
-     * param {string} divId
-     * param {List<IdNumDto>} rows 
-     */
-    line: function (canvasId, rows, color) {
-        var ids = [];
-        var values = [];
-        for (var i=0; i<rows.length; i++) {
-            var row = rows[i];
-            ids[i] = row.Id;
-            values[i] = row.Num;
-        }
-        _chart.drawLine(canvasId, ids, values, color);
-    },
-
-    //show one line chart
-    drawLine: function (canvasId, ids, values, color) {
-        if (_chart._nowChart != null)
-            _chart._nowChart.destroy();
-
-        _chart._nowChart = new Chart(document.getElementById(canvasId), {
-            type: 'line',
-            data: {
-                labels: ids,
-                datasets: [{
-                    //label: "Africa",
-                    data: values,
-                    borderColor: color,
-                    fill: false
-                }]
-            },
-            options: {
-                //legend: { display: false },
-                plugins: {
-                    legend: { display: false },
-                },
-                /*
-                title: {
-                    display: true,
-                    text: 'World population per region (in millions)'
-                }
-                */
-            }
-        });
-    },
 }; //class

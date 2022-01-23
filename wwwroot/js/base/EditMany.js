@@ -230,7 +230,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * validate form
      */
     this.valid = function () {
-        return (this.hasEform) ? this.eform.valid() :
+        return (this.hasEform) ? this.eform.validTable(this.validator) :
             (this.fnValid == null) ? true : this.fnValid();
     };
 

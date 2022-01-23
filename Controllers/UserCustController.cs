@@ -18,7 +18,7 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new UserCustRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new UserCustRead().GetPageAsync(Ctrl, dt));
         }
 
         private UserCustEdit EditService()

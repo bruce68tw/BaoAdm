@@ -3,7 +3,7 @@ var _pjax = {
 
     /**
      * initial
-     * param {string} boxFt : box(container) filter, ex: '.xu-body'
+     * param {string} boxFt : box(container) filter
      */
     init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!

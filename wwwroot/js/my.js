@@ -336,13 +336,63 @@ var _chart = {
     ],
 
     /**
-     * @description initial datatable(use jquery datatables)
-     * @param {object} canvasObj
-     * @param {string[]} labels
-     * @param {number[]} values
-     * @param {string[]} colors
-     * @param {json} config: custom config
-     * @return {Chart}
+     * show one line chart
+     * param divId {string}
+     * param rows {List<IdNumDto>}
+     * param color {string} 
+     */
+    line: function (canvasId, rows, color) {
+        var ids = [];
+        var values = [];
+        for (var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            ids[i] = row.Id;
+            values[i] = row.Num;
+        }
+        _chart.drawLine(canvasId, ids, values, color);
+    },
+
+    /**
+     * show one line chart, called Chart.js
+     */ 
+    drawLine: function (canvasId, ids, values, color) {
+        if (_chart._nowChart != null)
+            _chart._nowChart.destroy();
+
+        _chart._nowChart = new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: {
+                labels: ids,
+                datasets: [{
+                    //label: "Africa",
+                    data: values,
+                    borderColor: color,
+                    fill: false
+                }]
+            },
+            options: {
+                //legend: { display: false },
+                plugins: {
+                    legend: { display: false },
+                },
+                /*
+                title: {
+                    display: true,
+                    text: 'World population per region (in millions)'
+                }
+                */
+            }
+        });
+    },
+
+    /**
+     * initial datatable(use jquery datatables)
+     * param {object} canvasObj
+     * param {string[]} labels
+     * param {number[]} values
+     * param {string[]} colors
+     * param {json} config: custom config
+     * return {Chart}
      */
     initPie: function (canvasObj, labels, values, colors, config) {
 
@@ -386,52 +436,6 @@ var _chart = {
         return new Chart(canvasObj, config0);
     },
 
-    /**
-     * show one line chart
-     * param {string} divId
-     * param {List<IdNumDto>} rows 
-     */
-    line: function (canvasId, rows, color) {
-        var ids = [];
-        var values = [];
-        for (var i=0; i<rows.length; i++) {
-            var row = rows[i];
-            ids[i] = row.Id;
-            values[i] = row.Num;
-        }
-        _chart.drawLine(canvasId, ids, values, color);
-    },
-
-    //show one line chart
-    drawLine: function (canvasId, ids, values, color) {
-        if (_chart._nowChart != null)
-            _chart._nowChart.destroy();
-
-        _chart._nowChart = new Chart(document.getElementById(canvasId), {
-            type: 'line',
-            data: {
-                labels: ids,
-                datasets: [{
-                    //label: "Africa",
-                    data: values,
-                    borderColor: color,
-                    fill: false
-                }]
-            },
-            options: {
-                //legend: { display: false },
-                plugins: {
-                    legend: { display: false },
-                },
-                /*
-                title: {
-                    display: true,
-                    text: 'World population per region (in millions)'
-                }
-                */
-            }
-        });
-    },
 }; //class
 /**
  * crud function
@@ -565,54 +569,60 @@ var _crud = {
      * param updName {string} update name, default to _BR.Update
      */
     init: function (dtConfig, edits, updName) {
-        //#region 1.set _me.edits[]
-        var Childs = _crud.Childs;  //constant
-        var edit0 = null;  //master edit object
-        if (edits == null) {
-            edit0 = new EditOne();
-            //_me.hasChild = false;
-        } else {
-            edit0 = (edits[0] === null) ? new EditOne() : edits[0];
-            //_me.hasChild = edits.length > 1;
-            if (edits.length > 1) {
-                edit0[Childs] = [];
-                //var childs = _me.edits._childs;
-                for (var i = 1; i < edits.length; i++)
-                    edit0[Childs][i - 1] = edits[i];
+        //_crud.initEdit(edits);
+        _me.divEdit = $('#divEdit');
+        _me.hasEdit = (_me.divEdit.length > 0);
+        if (_me.hasEdit) {
+            var Childs = _crud.Childs;  //constant
+            var edit0 = null;  //master edit object
+            if (edits == null) {
+                edit0 = new EditOne();
+                //_me.hasChild = false;
+            } else {
+                edit0 = (edits[0] === null) ? new EditOne() : edits[0];
+                //_me.hasChild = edits.length > 1;
+                if (edits.length > 1) {
+                    edit0[Childs] = [];
+                    //var childs = _me.edits._childs;
+                    for (var i = 1; i < edits.length; i++)
+                        edit0[Childs][i - 1] = edits[i];
+                }
             }
+
+            _me.edit0 = edit0;
+            _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
+            //_me.editLen = _me.edits.length;
+            _crud.initForm(_me.edit0);
         }
-        //#endregion
 
         //#region 2.set instance variables
+        _me.divRead = $('#divRead');
+        _me.hasRead = (_me.divRead.length > 0);
+        if (_me.hasRead) {
+            _me.rform = $('#formRead');
+            if (_me.rform.length === 0)
+                _me.rform = null;
+            _me.rform2 = $('#formRead2');
+            if (_me.rform2.length === 0)
+                _me.rform2 = null;
+            if (_me.rform != null)
+                _idate.init(_me.rform);
+            if (_me.rform2 != null)
+                _idate.init(_me.rform2);
+
+            //4.Create Datatable object
+            _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
+        }
+
         _me.nowFun = '';    //now fun of edit0 form
         _me.updName = updName;
-        _me.divRead = $('#divRead');
-        _me.divEdit = $('#divEdit');
-        _me.rform = $('#formRead');
-        if (_me.rform.length === 0)
-            _me.rform = null;
-        _me.rform2 = $('#formRead2');
-        if (_me.rform2.length === 0)
-            _me.rform2 = null;
-        if (_me.rform != null)
-            _idate.init(_me.rform);
-        if (_me.rform2 != null)
-            _idate.init(_me.rform2);
-
-        _me.edit0 = edit0;
-        _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
-        //_me.editLen = _me.edits.length;
 
         //for xgOpenModal
         _me.modal = null;
         //#endregion
 
         //3.initial forms(recursive)
-        _crud.initForm(_me.edit0);
         _prog.init();   //prog path
-
-        //4.Create Datatable object
-        _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
     },
 
     /**
@@ -650,23 +660,33 @@ var _crud = {
 
     /**
      * change newDiv to active
-     * param newDiv {object} jquery object
+     * param toRead {bool} show divRead or not
+     * param nowDiv {object} (optional) now div to show
      */ 
-    swap: function (toRead) {
+    swap: function (toRead, nowDiv) {
+        if (!_me.hasRead || !_me.hasEdit)
+            return;
+
+        var isDefault = _var.isEmpty(nowDiv);
+        if (isDefault)
+            nowDiv = _me.divEdit;
+
         var oldDiv, newDiv;
         if (toRead) {
-            oldDiv = _me.divEdit;
+            oldDiv = nowDiv;
             newDiv = _me.divRead;
         } else {
             oldDiv = _me.divRead;
-            newDiv = _me.divEdit;
+            newDiv = nowDiv;
         }
 
         if (_obj.isShow(oldDiv)) {
             oldDiv.fadeToggle(200);
             newDiv.fadeToggle(500);
         }
-        _crud._afterSwap(toRead);
+
+        if (isDefault)
+            _crud._afterSwap(toRead);
     },
 
     //=== event start ===
@@ -691,6 +711,15 @@ var _crud = {
         else
             _form.hideShow(null, [find2]);
 
+    },
+
+    /**
+     * onclick reset find form
+     */
+    onResetFind: function () {
+        _form.reset(_me.rform);
+        if (_me.rform2 != null)
+            _form.reset(_me.rform2);
     },
 
     /**
@@ -737,10 +766,12 @@ var _crud = {
     },
 
     _getJsonAndSetMode: function (key, fun) {
+        /*
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
         }
+        */
 
         //_crud.toUpdateMode(key);
         var act = (fun == _fun.FunU) ? 'GetUpdJson' : 
@@ -943,7 +974,7 @@ var _crud = {
 
         //if (!isNew)
         //    data.key = key;
-        _crud._removeNull(0, data);
+        _json.removeNull(data);
         return data;
     },
 
@@ -1064,7 +1095,7 @@ var _crud = {
         var edit0 = _me.edit0;
         if (_fun.hasValue(edit0.fnWhenSave)) {
             var error = edit0.fnWhenSave();
-            if (error != '') {
+            if (_str.notEmpty(error)) {
                 _tool.msg(error);
                 return;
             }
@@ -1073,7 +1104,7 @@ var _crud = {
         //get saving row
         var formData = new FormData();  //for upload files if need
         var row = _crud.getUpdJson(formData);
-        if (row == null) {
+        if (_json.isEmpty(row)) {
             _tool.msg(_BR.SaveNone);
             return;
         }
@@ -1104,6 +1135,7 @@ var _crud = {
         }
     },
 
+    /* move to _json.removeNull()
     //recursive remove null for json object
     //level: for debug
     _removeNull: function (level, obj) {
@@ -1162,6 +1194,7 @@ var _crud = {
             }
         });
     },
+    */
 
     /**
      * after save
@@ -1182,8 +1215,11 @@ var _crud = {
         //case of ok
         //var start = _me.dt.dt.page.info().start;
         _tool.alert(_BR.SaveOk + '(' + data.Value + ')');
-        _me.dt.reload();
-        _crud.toReadMode();
+
+        if (_me.hasRead) {
+            _me.dt.reload();
+            _crud.toReadMode();
+        }
     },
 
     /**
@@ -1509,26 +1545,35 @@ var _edit = {
     },
     */
 
-    //called by: EditOne.js, EditMany.js
-    //not set mapId
+    /**
+     * get one updated row for New/Updated
+     * called by: EditOne.js, DbAdm MyCrud.js
+     * param kid {string} key fid
+     * param fidTypes {id-value array}
+     * param box {object} form object
+     * return json row
+     */ 
     getUpdRow: function (kid, fidTypes, box) {
         //if key empty then return row
+        var row = _form.toJson(box);
         var key = _input.get(kid, box);
         if (_str.isEmpty(key))
-            return _form.toJson(box);
+            return row;
 
         var diff = false;
-        var row = {};
+        var result = {};
         var fid, ftype, value, obj, old;
         for (var j = 0; j < fidTypes.length; j = j + 2) {
             //skip read only type
             ftype = fidTypes[j + 1];
-            if (ftype === 'link' || ftype === 'read')
-                continue;
+            //if (ftype === 'link' || ftype === 'read')
+            //    continue;
 
             fid = fidTypes[j];
-            obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
-            value = _input.getO(obj, box, ftype);
+            //obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
+            obj = _input.getObj(fid, box, ftype);
+            //value = _input.getO(obj, box, ftype);
+            value = row[fid];
             old = obj.data(_edit.DataOld);
             //if fully compare, string will not equal numeric !!
             if (value != old) {
@@ -1537,15 +1582,15 @@ var _edit = {
                     _date.mmToValue(value) === _date.mmToValue(old))
                     continue;
 
-                row[fid] = value;
+                result[fid] = value;
                 diff = true;
             }
         }
         if (!diff)
             return null;
 
-        row[kid] = key;
-        return row;
+        result[kid] = key;
+        return result;
     },
 
     /**
@@ -1637,6 +1682,7 @@ var _edit = {
         }
     },
 
+    //#region remark code
     /**
      * get field info array by box object & row filter
      * box {object} form/div container
@@ -1691,6 +1737,7 @@ var _edit = {
         return fidTypes;
     },
     */
+    //#endregion
 
 };
 var _error = {
@@ -1734,7 +1781,7 @@ var _form = {
     toJson: function (form) {
         //skip link & read fields
         var json = {};
-        form.find(_fun.fidFilter()).filter(':not([data-type=link],[data-type=read])').each(function () {
+        form.find(_fun.fidFilter()).filter(':not(.xi-unsave)').each(function () {
             var obj = $(this);
             json[_fun.getFid(obj)] = _input.getO(obj, form);            
         });
@@ -3116,7 +3163,7 @@ var _input = {
                 break;
             case 'read':
                 var format = obj.data('format');
-                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
+                if (_str.notEmpty(format) && _str.notEmpty(_BR[format]))
                     value = _date.mmToFormat(value, _BR[format]);
                 _iread.setO(obj, value);
                 break;
@@ -3136,8 +3183,20 @@ var _input = {
         return obj.data('type');
     },
 
+    /**
+     * get object
+     * param fid {string}
+     * param box {object}
+     * param ftype {string} optional
+     * return object
+     */
+    getObj: function (fid, box, ftype) {
+        ftype = ftype || _input.getType(_obj.get(fid, box));
+        return (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
+    },
 
-    //=== below is old && remark ===
+
+    //#region remark code
     /**
      * ??顯示欄位的錯誤訊息, fid欄位會直接加上 error className
      * 先找 error label, 再找上面相鄰的 object, 然後加入 xg-error
@@ -3287,6 +3346,7 @@ var _input = {
         //$('.' + _fun.errBoxCls).removeClass(_fun.errBoxCls);
     },
     */
+    //#endregion
 
 }; //class
 
@@ -3674,11 +3734,11 @@ var _json = {
     },
 
     /**
-     convert keyValues to json object
-     @param {array} keyValues keyValue array
-     @param {string} keyId key field id, default to 'Key'
-     @param {string} valueId value field id, default to 'Value'
-     @return {object} 回傳的json的欄位名稱前面會加上'f'
+     * convert keyValues to json object
+     * param keyValues {array} keyValue array
+     * param keyId {string} key field id, default to 'Key'
+     * param valueId {string} value field id, default to 'Value'
+     * return {object} 回傳的json的欄位名稱前面會加上'f'
      */
     keyValuesToJson: function (keyValues, keyId, valueId) {
         if (keyValues === null || keyValues.length === 0)
@@ -3761,6 +3821,73 @@ var _json = {
         for (var i = 0; i < froms.length; i++) {
             tos[len + i] = froms[i];
         }
+    },
+
+    /**
+     * (recursive) remove null for json object
+     * param obj {json} by ref
+     * param level {int} (default 0) debug purpose, base 0
+     * return void
+     */
+    removeNull: function (obj, level) {
+        //debugger;
+        level = level || 0;
+        $.each(obj, function (key, value) {
+            if (value === null) {
+                //delete only null, empty is not !!
+                delete obj[key];
+            } else if (_json.isKeyValue(value)) {
+                _json.removeNull(value, level + 1);
+            } else if ($.isArray(value)) {
+                //check
+                var len = value.length;
+                if (len == 0) {
+                    delete obj[key];
+                    return; //continue
+                }
+
+                //case of string array
+                if (!_json.isKeyValue(value[0])) {
+                    var isEmpty = true;
+                    for (var i = 0; i < len; i++) {
+                        if (!_str.isEmpty(value[i])) {
+                            isEmpty = false;
+                            break;
+                        }
+                    }
+                    if (isEmpty)
+                        delete obj[key];
+                    return; //continue
+                }
+
+                //case of json array
+                $.each(value, function (k2, v2) {
+                    _json.removeNull(v2, level + 1);
+
+                    if (_json.isEmpty(v2))
+                        v2 = null;
+                });
+
+                //check json and remove if need
+                var isEmpty = true;
+                //from end
+                for (var i = len - 1; i >= 0; i--) {
+                    if (!_json.isEmpty(value[i])) {
+                        isEmpty = false;
+                    } else if (isEmpty) {
+                        //delete array element
+                        delete value[i];
+                    } else {
+                        value[i] = null;
+                    }
+                }
+                if (isEmpty)
+                    delete obj[key];
+            }
+        });
+
+        if (_json.isEmpty(obj))
+            obj = null;
     },
 
 }; //class
@@ -4029,7 +4156,7 @@ var _pjax = {
 
     /**
      * initial
-     * param {string} boxFt : box(container) filter, ex: '.xu-body'
+     * param {string} boxFt : box(container) filter
      */
     init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!
@@ -4201,7 +4328,11 @@ var _str = {
 
     //variables is empty or not
     isEmpty: function (str) {
-        return (str === undefined || str === null || str === '')
+        return (str === undefined || str === null || str === '');
+    },
+
+    notEmpty: function (str) {
+        return !_str.isEmpty(str);
     },
 
     //convert empty string to new string
@@ -4309,6 +4440,16 @@ var _table = {
             _str.format('<a href="javascript:_crud.onUpdate(\'{0}\');"><i class="ico-delete" title="{0}"></i></a>', key, _BR.TipUpdate) +
             _str.format('<a href="javascript:_table.rowMoveUp(this);"><i class="ico-up" title="{0}"></i></a>', _BR.TipUpdate) +
             _str.format('<a href="javascript:_table.rowMoveDown(this);"><i class="ico-down" title="{0}"></i></a>', _BR.TipUpdate);
+    },
+
+    /**
+     * get rows count
+     * param table {object} table object
+     * param fid {string} field id(name attribute)
+     * return {int} rows count
+     */
+    getRowCount: function (table, fid) {
+        return table.find(_fun.fidFilter(fid)).length;
     },
 
 }; //class
@@ -4463,8 +4604,8 @@ var _tool = {
 //use jquery validation
 var _valid = {
 
-    //error & valid calss same to jquer validate
-    errorClass: 'error',
+    //error & valid class same to jquer validate
+    //errorClass: 'error',
     //validClass: 'valid',
 
     /**
@@ -4479,42 +4620,110 @@ var _valid = {
         //config
         var config = {
             ignore: ':hidden:not([data-type=html]),.note-editable.card-block',   //or summernote got error
+            //errorClass: 'label label-danger',
             errorElement: 'span',
             errorPlacement: function (error, elm) {
-                error.insertAfter(_valid._getBox(elm));
+                //debugger;
+                error.insertAfter(_valid._getBox($(elm)));
                 return false;
-            }
+            },
+            //ignore: '',     //xiFile has hidden input need validate
+            //onclick: false, //checkbox, radio, and select
             /*
-            ignore: '',     //xiFile has hidden input need validate
-            onclick: false, //checkbox, radio, and select
-            unhighlight: function (elm, errorClass, validClass) {
-                var me = $(elm);
-                me.data('edit', 1);    //註記此欄位有異動
-            }
-            highlight: function (elm) {
-                _valid._getError(elm).addClass(_valid.errorClass);
-                return false;
-            },
-            unhighlight: function (elm) {
-                _valid._getError(elm).removeClass(_valid.errorClass);
-                return false;
-            },
             */
-            //errorClass: 'label label-danger',
+            highlight: function (elm, errorClass, validClass) {
+                //debugger;
+                var me = $(elm);
+                var box = _valid._getBox(me);
+                box.removeClass(validClass).addClass(errorClass);
+                var obj = _valid._getError(me);
+                if (obj != null)
+                    obj.show();
+                return false;
+            },
+            unhighlight: function (elm, errorClass, validClass) {
+                //debugger;
+                var me = $(elm);
+                var box = _valid._getBox(me);
+                box.removeClass(errorClass).addClass(validClass);
+                var obj = _valid._getError(me);
+                if (obj != null)
+                    obj.hide();
+                return false;
+                //var me = $(elm);
+                //me.data('edit', 1);    //註記此欄位有異動
+            },
+            //copy from jquery validate defaultShowErrors()
+            showErrors: function (errorMap, errorList) {
+                //this.defaultShowErrors();
+                var i, elements, error;
+                for (i = 0; this.errorList[i]; i++) {
+                    error = this.errorList[i];
+                    if (this.settings.highlight) {
+                        this.settings.highlight.call(this, error.element, this.settings.errorClass, this.settings.validClass);
+                    }
+                    this.showLabel(error.element, error.message);
+                }
+                if (this.errorList.length) {
+                    this.toShow = this.toShow.add(this.containers);
+                }
+                if (this.settings.success) {
+                    for (i = 0; this.successList[i]; i++) {
+                        this.showLabel(this.successList[i]);
+                    }
+                }
+                if (this.settings.unhighlight) {
+                    for (i = 0, elements = this.validElements(); elements[i]; i++) {
+                        this.settings.unhighlight.call(this, elements[i], this.settings.errorClass, this.settings.validClass);
+                    }
+                }
+                //remark below !!
+                //this.toHide = this.toHide.not(this.toShow);
+                //this.hideErrors();
+                //this.addWrapper(this.toShow).show();
+                //return false;
+            },
         };
 
         return form.validate(config);
     },
 
-    _getBox: function (elm) {
-        return $(elm).closest('.xi-box');
+    _getBox: function (obj) {
+        //closest will check this first !!
+        return obj.closest('.xi-box');
     },
 
-    //get error object
-    _getError: function (elm) {
-        return _valid._getBox(elm).next();
+    /**
+     * get error object
+     * param obj {object} input object
+     */ 
+    _getError: function (obj) {
+        var error = _valid._getBox(obj).next();
+        return (error.length == 1 && error.hasClass('error') && error.is('span'))
+            ? error : null;
     },
 
+    valid: function () {
+        var valid, validator, errorList;
+
+        if ($(this[0]).is("form")) {
+            valid = this.validate().form();
+        } else {
+            errorList = [];
+            valid = true;
+            validator = $(this[0].form).validate();
+            this.each(function () {
+                valid = validator.element(this) && valid;
+                if (!valid) {
+                    errorList = errorList.concat(validator.errorList);
+                }
+            });
+            validator.errorList = errorList;
+        }
+        return valid;
+    },
+
+    //#region remark code
     /**
      * check regular
      * param fids {array} fid string array
@@ -4560,6 +4769,7 @@ var _valid = {
         return _valid.anyRegularsWrong(fids, msg, expr);
     },
      */
+    //#endregion
 
 }; //class
 
@@ -5006,7 +5216,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * validate form
      */
     this.valid = function () {
-        return (this.hasEform) ? this.eform.valid() :
+        return (this.hasEform) ? this.eform.validTable(this.validator) :
             (this.fnValid == null) ? true : this.fnValid();
     };
 
@@ -5799,7 +6009,7 @@ function Flow(boxId, mNode, mLine) {
                 //debugger;
                 //var node = $(params.el);
                 var pos = $(params.el).position();
-                _form.loadJson(nodeObj, { PosX: pos.left, PosY: pos.top });
+                _form.loadJson(nodeObj, { PosX: Math.floor(pos.left), PosY: Math.floor(pos.top) });
             },
         });
 

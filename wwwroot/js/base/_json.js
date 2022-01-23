@@ -37,11 +37,11 @@ var _json = {
     },
 
     /**
-     convert keyValues to json object
-     @param {array} keyValues keyValue array
-     @param {string} keyId key field id, default to 'Key'
-     @param {string} valueId value field id, default to 'Value'
-     @return {object} 回傳的json的欄位名稱前面會加上'f'
+     * convert keyValues to json object
+     * param keyValues {array} keyValue array
+     * param keyId {string} key field id, default to 'Key'
+     * param valueId {string} value field id, default to 'Value'
+     * return {object} 回傳的json的欄位名稱前面會加上'f'
      */
     keyValuesToJson: function (keyValues, keyId, valueId) {
         if (keyValues === null || keyValues.length === 0)
@@ -124,6 +124,73 @@ var _json = {
         for (var i = 0; i < froms.length; i++) {
             tos[len + i] = froms[i];
         }
+    },
+
+    /**
+     * (recursive) remove null for json object
+     * param obj {json} by ref
+     * param level {int} (default 0) debug purpose, base 0
+     * return void
+     */
+    removeNull: function (obj, level) {
+        //debugger;
+        level = level || 0;
+        $.each(obj, function (key, value) {
+            if (value === null) {
+                //delete only null, empty is not !!
+                delete obj[key];
+            } else if (_json.isKeyValue(value)) {
+                _json.removeNull(value, level + 1);
+            } else if ($.isArray(value)) {
+                //check
+                var len = value.length;
+                if (len == 0) {
+                    delete obj[key];
+                    return; //continue
+                }
+
+                //case of string array
+                if (!_json.isKeyValue(value[0])) {
+                    var isEmpty = true;
+                    for (var i = 0; i < len; i++) {
+                        if (!_str.isEmpty(value[i])) {
+                            isEmpty = false;
+                            break;
+                        }
+                    }
+                    if (isEmpty)
+                        delete obj[key];
+                    return; //continue
+                }
+
+                //case of json array
+                $.each(value, function (k2, v2) {
+                    _json.removeNull(v2, level + 1);
+
+                    if (_json.isEmpty(v2))
+                        v2 = null;
+                });
+
+                //check json and remove if need
+                var isEmpty = true;
+                //from end
+                for (var i = len - 1; i >= 0; i--) {
+                    if (!_json.isEmpty(value[i])) {
+                        isEmpty = false;
+                    } else if (isEmpty) {
+                        //delete array element
+                        delete value[i];
+                    } else {
+                        value[i] = null;
+                    }
+                }
+                if (isEmpty)
+                    delete obj[key];
+            }
+        });
+
+        if (_json.isEmpty(obj))
+            obj = null;
     },
 
 }; //class

@@ -10739,6 +10739,29 @@ $.extend( $.fn, {
 		return valid;
 	},
 
+	/**
+	 * (Bruce add)
+	 * refer valid(), validate table multiple rows
+	 * param validator {object}
+	 * return {boolean} validate status
+	 */
+	validTable: function (validator) {
+		var valid = true;
+		var errorList = [];
+		var fidFilter = _fun.fidFilter();
+		$(this).find('tr').each(function () {
+			$(this).find(fidFilter).filter(':not(.xi-unsave)').each(function () {
+				valid = validator.element(this) && valid;
+				if (!valid) {
+					errorList = errorList.concat(validator.errorList);
+				}
+			});
+		});
+
+		validator.errorList = errorList;
+		return valid;
+	},
+
 	// https://jqueryvalidation.org/rules/
 	rules: function( command, argument ) {
 		var element = this[ 0 ],
@@ -35586,9 +35609,11 @@ function extractContainer(data, xhr, options) {
     // Then scrub any titles from their descendants
     obj.contents.find('title').remove()
 
+    /* (Bruce remark)
     // Gather all script[src] elements
-    //obj.scripts = findAll(obj.contents, 'script[src]').remove()
-    //obj.contents = obj.contents.not(obj.scripts)
+    obj.scripts = findAll(obj.contents, 'script[src]').remove()
+    obj.contents = obj.contents.not(obj.scripts)
+    */
   }
 
   // Trim any whitespace off the title

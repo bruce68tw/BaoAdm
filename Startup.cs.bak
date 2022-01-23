@@ -43,21 +43,21 @@ namespace BaoAdm
             //3.http context
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //3.user info for base component
+            //4.user info for base component
             services.AddSingleton<IBaseUserService, MyBaseUserService>();
-            //services.AddSingleton<IBaseUserService, BaseUserService>();
 
-            //4.ado.net for mssql
+            //5.ado.net for mssql
             services.AddTransient<DbConnection, SqlConnection>();
             services.AddTransient<DbCommand, SqlCommand>();
 
-            //5.appSettings "FunConfig" section -> _Fun.Config
+            //6.appSettings "FunConfig" section -> _Fun.Config
             var config = new ConfigDto();
             Configuration.GetSection("FunConfig").Bind(config);
             _Fun.Config = config;
 
-            //6.session (memory cache)
+            //7.session (memory cache)
             services.AddDistributedMemoryCache();
+            //services.AddStackExchangeRedisCache(opts => { opts.Configuration = "127.0.0.1:6379"; });
             services.AddSession(opts =>
             {
                 opts.Cookie.HttpOnly = true;
@@ -69,13 +69,10 @@ namespace BaoAdm
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //1.initial & set locale
+            //initial & set locale
             _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql);
-
-            //2.set default locale
             _Locale.SetCultureAsync(_Fun.Config.Locale);
 
-            //3.exception handle
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

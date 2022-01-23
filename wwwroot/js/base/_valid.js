@@ -2,8 +2,8 @@
 //use jquery validation
 var _valid = {
 
-    //error & valid calss same to jquer validate
-    errorClass: 'error',
+    //error & valid class same to jquer validate
+    //errorClass: 'error',
     //validClass: 'valid',
 
     /**
@@ -18,42 +18,110 @@ var _valid = {
         //config
         var config = {
             ignore: ':hidden:not([data-type=html]),.note-editable.card-block',   //or summernote got error
+            //errorClass: 'label label-danger',
             errorElement: 'span',
             errorPlacement: function (error, elm) {
-                error.insertAfter(_valid._getBox(elm));
+                //debugger;
+                error.insertAfter(_valid._getBox($(elm)));
                 return false;
-            }
+            },
+            //ignore: '',     //xiFile has hidden input need validate
+            //onclick: false, //checkbox, radio, and select
             /*
-            ignore: '',     //xiFile has hidden input need validate
-            onclick: false, //checkbox, radio, and select
-            unhighlight: function (elm, errorClass, validClass) {
-                var me = $(elm);
-                me.data('edit', 1);    //註記此欄位有異動
-            }
-            highlight: function (elm) {
-                _valid._getError(elm).addClass(_valid.errorClass);
-                return false;
-            },
-            unhighlight: function (elm) {
-                _valid._getError(elm).removeClass(_valid.errorClass);
-                return false;
-            },
             */
-            //errorClass: 'label label-danger',
+            highlight: function (elm, errorClass, validClass) {
+                //debugger;
+                var me = $(elm);
+                var box = _valid._getBox(me);
+                box.removeClass(validClass).addClass(errorClass);
+                var obj = _valid._getError(me);
+                if (obj != null)
+                    obj.show();
+                return false;
+            },
+            unhighlight: function (elm, errorClass, validClass) {
+                //debugger;
+                var me = $(elm);
+                var box = _valid._getBox(me);
+                box.removeClass(errorClass).addClass(validClass);
+                var obj = _valid._getError(me);
+                if (obj != null)
+                    obj.hide();
+                return false;
+                //var me = $(elm);
+                //me.data('edit', 1);    //註記此欄位有異動
+            },
+            //copy from jquery validate defaultShowErrors()
+            showErrors: function (errorMap, errorList) {
+                //this.defaultShowErrors();
+                var i, elements, error;
+                for (i = 0; this.errorList[i]; i++) {
+                    error = this.errorList[i];
+                    if (this.settings.highlight) {
+                        this.settings.highlight.call(this, error.element, this.settings.errorClass, this.settings.validClass);
+                    }
+                    this.showLabel(error.element, error.message);
+                }
+                if (this.errorList.length) {
+                    this.toShow = this.toShow.add(this.containers);
+                }
+                if (this.settings.success) {
+                    for (i = 0; this.successList[i]; i++) {
+                        this.showLabel(this.successList[i]);
+                    }
+                }
+                if (this.settings.unhighlight) {
+                    for (i = 0, elements = this.validElements(); elements[i]; i++) {
+                        this.settings.unhighlight.call(this, elements[i], this.settings.errorClass, this.settings.validClass);
+                    }
+                }
+                //remark below !!
+                //this.toHide = this.toHide.not(this.toShow);
+                //this.hideErrors();
+                //this.addWrapper(this.toShow).show();
+                //return false;
+            },
         };
 
         return form.validate(config);
     },
 
-    _getBox: function (elm) {
-        return $(elm).closest('.xi-box');
+    _getBox: function (obj) {
+        //closest will check this first !!
+        return obj.closest('.xi-box');
     },
 
-    //get error object
-    _getError: function (elm) {
-        return _valid._getBox(elm).next();
+    /**
+     * get error object
+     * param obj {object} input object
+     */ 
+    _getError: function (obj) {
+        var error = _valid._getBox(obj).next();
+        return (error.length == 1 && error.hasClass('error') && error.is('span'))
+            ? error : null;
     },
 
+    valid: function () {
+        var valid, validator, errorList;
+
+        if ($(this[0]).is("form")) {
+            valid = this.validate().form();
+        } else {
+            errorList = [];
+            valid = true;
+            validator = $(this[0].form).validate();
+            this.each(function () {
+                valid = validator.element(this) && valid;
+                if (!valid) {
+                    errorList = errorList.concat(validator.errorList);
+                }
+            });
+            validator.errorList = errorList;
+        }
+        return valid;
+    },
+
+    //#region remark code
     /**
      * check regular
      * param fids {array} fid string array
@@ -99,5 +167,6 @@ var _valid = {
         return _valid.anyRegularsWrong(fids, msg, expr);
     },
      */
+    //#endregion
 
 }; //class

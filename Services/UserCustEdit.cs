@@ -1,11 +1,9 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
-using Newtonsoft.Json.Linq;
 
 namespace BaoAdm.Services
 {
-    public class UserCustEdit : XpEdit
+    public class UserCustEdit : XgEdit
     {
         public UserCustEdit(string ctrl) : base(ctrl) { }
 

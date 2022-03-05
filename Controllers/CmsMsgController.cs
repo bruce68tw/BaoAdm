@@ -1,5 +1,5 @@
-﻿using BaoAdm.Enums;
-using BaoAdm.Models;
+﻿using BaoAdm.Models;
+using BaoLib.Enums;
 using BaseWeb.Attributes;
 
 namespace BaoAdm.Controllers

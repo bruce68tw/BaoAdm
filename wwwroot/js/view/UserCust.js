@@ -17,7 +17,7 @@
                     return data == 1 ? '是' : '';
                 }},
 				{ targets: [6], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, full.Name, false, false, true);
+                    return _crud.dtCrudFun(full.Id, full.Name, true, true, false);
                 }},
             ],
         };

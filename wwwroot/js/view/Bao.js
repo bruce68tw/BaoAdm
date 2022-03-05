@@ -9,10 +9,10 @@
                 { data: 'EndTime' },
                 { data: 'IsBatch' },
                 { data: 'IsMove' },
-                { data: 'GiftType' },
+                { data: 'IsMoney' },
                 { data: 'GiftName' },
                 { data: 'StageCount' },
-                //{ data: '_Fun' },
+                { data: '_Fun' },
             ],
             columnDefs: [
 				{ targets: [1], render: function (data, type, full, meta) {
@@ -22,21 +22,17 @@
                     return _date.mmToUiDt2(data);
                 }},
 				{ targets: [3], render: function (data, type, full, meta) {
-                    return (data == '1') ? '是' : '';
+                    return _crud.dtYesEmpty(data);
                 }},
 				{ targets: [4], render: function (data, type, full, meta) {
-                    return (data == '1') ? '是' : '';
+                    return _crud.dtYesEmpty(data);
                 }},
 				{ targets: [5], render: function (data, type, full, meta) {
-                    return (data == 'G') ? '獎品' :
-                        (data == 'M') ? '獎金' :
-                        '' ;
+                    return _crud.dtYesEmpty(data);
                 }},
-                /*
 				{ targets: [8], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, full.Name, true, true, true);
+                    return _crud.dtCrudFun(full.Id, full.Name, true, false, true);
                 }},
-                */
             ],
         };
 

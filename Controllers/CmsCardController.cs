@@ -1,5 +1,6 @@
-﻿using BaoAdm.Enums;
-using BaoAdm.Models;
+﻿using BaoAdm.Models;
+using BaoAdm.Services;
+using BaoLib.Enums;
 using BaseWeb.Attributes;
 
 namespace BaoAdm.Controllers
@@ -10,14 +11,14 @@ namespace BaoAdm.Controllers
         public CmsCardController()
         {
             CmsType = CmsTypeEstr.Card;
-            //DirUpload = _Xp.DirCmsType(CmsType);
+            DirUpload = _Xp.DirCmsType(CmsType);
             EditDto = new CmsEditDto()
             {
                 Title = "標題",
                 //Text = "內容",
-                Html = "賀卡內容",
+                //Html = "賀卡內容",
                 //Note = "備註",
-                //FileName = "上傳檔案",
+                FileName = "上傳檔案",
                 StartTime = "發佈時間",
                 EndTime = "結束時間",
             };

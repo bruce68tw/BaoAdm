@@ -86,6 +86,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaoLib\BaoLib.csproj" />
     <ProjectReference Include="..\Base\BaseWeb\BaseWeb.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base", "..\Base\Base\Base.csproj", "{B6B3FA51-673F-4408-A1AD-108C87C6389F}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseApi", "..\Base\BaseApi\BaseApi.csproj", "{852AB9AF-0F72-49B8-8745-85A002B7FFBC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaoAdm", "BaoAdm.csproj", "{73D13597-C48B-4F01-91B5-B78D77C0689C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaoLib", "..\BaoLib\BaoLib.csproj", "{4FA7DF7C-A7F4-4A9C-9E2F-9BE3FCD3BE42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{73D13597-C48B-4F01-91B5-B78D77C0689C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73D13597-C48B-4F01-91B5-B78D77C0689C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73D13597-C48B-4F01-91B5-B78D77C0689C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FA7DF7C-A7F4-4A9C-9E2F-9BE3FCD3BE42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FA7DF7C-A7F4-4A9C-9E2F-9BE3FCD3BE42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FA7DF7C-A7F4-4A9C-9E2F-9BE3FCD3BE42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FA7DF7C-A7F4-4A9C-9E2F-9BE3FCD3BE42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

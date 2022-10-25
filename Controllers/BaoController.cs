@@ -13,7 +13,7 @@ namespace BaoAdm.Controllers
     {
         public async Task<ActionResult> Read()
         {
-            ViewBag.LaunchStatuses = await _XpCode.GetLaunchStatusesAsync();
+            ViewBag.LaunchStatuses = await _XpCode.GetLaunchStatusesA();
             return View();
         }
 
@@ -31,19 +31,19 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
+            return JsonToCnt(await EditService().GetUpdJsonA(key));
         }
 
         [HttpPost]
         public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(await EditService().GetViewJsonAsync(key));
+            return JsonToCnt(await EditService().GetViewJsonA(key));
         }
 
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(await EditService().UpdateAsync(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json)));
         }
 
     }//class

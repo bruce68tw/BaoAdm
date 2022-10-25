@@ -28,16 +28,16 @@ namespace BaoAdm.Services
             };
         }
 
-        override public async Task<ResultDto> UpdateAsync(string key, JObject json)
+        override public async Task<ResultDto> UpdateA(string key, JObject json)
         {
             _key = key;
-            return await EditService().UpdateAsync(key, json, fnAfterSave: AfterUpdateAsync);
+            return await EditService().UpdateA(key, json, fnAfterSave: AfterUpdateA);
         }
 
-        private async Task<string> AfterUpdateAsync(Db db, JObject keyJson)
+        private async Task<string> AfterUpdateA(Db db, JObject keyJson)
         {
             var key = RedisTypeEstr.BaoDetail + _key;
-            await _Redis.DeleteKeyAsync(key);
+            await _Redis.DeleteKeyA(key);
             return "";
         }
 

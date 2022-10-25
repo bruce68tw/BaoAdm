@@ -41,7 +41,7 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new XpCmsRead(CmsType).GetPageAsync(Ctrl, dt));
+            return JsonToCnt(await new XpCmsRead(CmsType).GetPageA(Ctrl, dt));
         }
 
         private XpCmsEdit EditService()
@@ -72,19 +72,19 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Delete(string key)
         {
-            return Json(await EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteA(key));
         }
 
         [HttpPost]
         public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
+            return JsonToCnt(await EditService().GetUpdJsonA(key));
         }
 
         [HttpPost]
         public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(await EditService().GetViewJsonAsync(key));
+            return JsonToCnt(await EditService().GetViewJsonA(key));
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace BaoAdm.Controllers
         public async Task<string> SetHtmlImage(IFormFile file)
         {
             var subDir = "image/Cms" + CmsType;
-            var fileName = await _WebFile.SaveHtmlImage(file, $"{_Web.DirWeb}{subDir}");
+            var fileName = await _WebFile.SaveHtmlImageA(file, $"{_Web.DirWeb}{subDir}");
             return _Fun.GetHtmlImageUrl($"{subDir}/{fileName}");
         }
 

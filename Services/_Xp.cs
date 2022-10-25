@@ -104,7 +104,7 @@ namespace BaoAdm.Services
         private static async Task<FileResult> ViewFileAsync(string dir, string fid, string key, string ext)
         {
             var path = $"{dir}{fid}_{key}.{ext}";
-            return await _WebFile.ViewFileAsync(path, $"{fid}.{ext}");
+            return await _WebFile.ViewFileA(path, $"{fid}.{ext}");
         }
 
         #endregion

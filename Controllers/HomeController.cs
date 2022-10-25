@@ -55,7 +55,7 @@ where Account=@Account
 ";
             var status = false;
             var hasPwd = !_Str.IsEmpty(vo.Pwd);
-            var row = await _Db.GetJsonAsync(sql, new List<object>() { "Account", vo.Account });
+            var row = await _Db.GetJsonA(sql, new List<object>() { "Account", vo.Account });
             if (row != null)
             {
                 var dbPwd = row["Pwd"].ToString();
@@ -83,7 +83,7 @@ where Account=@Account
                 //DeptName = "",
                 Locale = _Fun.Config.Locale,
                 //ProgAuthStrs = "",
-                IsLogin = true,
+                //IsLogin = true,
                 UserType = userType,
             };
             #endregion

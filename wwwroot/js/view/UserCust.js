@@ -17,13 +17,13 @@
                     return data == 1 ? '是' : '';
                 }},
 				{ targets: [6], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, full.Name, true, true, false);
+                    return _crudR.dtCrudFun(full.Id, full.Name, true, true, false);
                 }},
             ],
         };
 
         //initial
-		_crud.init(config);
+		_crudR.init(config);
     },
 
 }; //class

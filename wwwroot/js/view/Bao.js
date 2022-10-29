@@ -22,22 +22,22 @@
                     return _date.mmToUiDt2(data);
                 }},
 				{ targets: [3], render: function (data, type, full, meta) {
-                    return _crud.dtYesEmpty(data);
+                    return _crudR.dtYesEmpty(data);
                 }},
 				{ targets: [4], render: function (data, type, full, meta) {
-                    return _crud.dtYesEmpty(data);
+                    return _crudR.dtYesEmpty(data);
                 }},
 				{ targets: [5], render: function (data, type, full, meta) {
-                    return _crud.dtYesEmpty(data);
+                    return _crudR.dtYesEmpty(data);
                 }},
 				{ targets: [8], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, full.Name, true, false, true);
+                    return _crudR.dtCrudFun(full.Id, full.Name, true, false, true);
                 }},
             ],
         };
 
         //initial
-        _crud.init(config);
+        _crudR.init(config);
     },
 
 }; //class

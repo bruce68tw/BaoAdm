@@ -12,13 +12,13 @@
             ],
             columnDefs: [
                 { targets: [4], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, full.Name, false, false, true);
+                    return _crudR.dtCrudFun(full.Id, full.Name, false, false, true);
                 }},
             ],
         };
 
         //initial
-		_crud.init(config);
+		_crudR.init(config);
     },
 
 }; //class

@@ -13,7 +13,7 @@ namespace BaoAdm.Services
             {
 				Table = "dbo.[UserCust]",
                 PkeyFid = "Id",
-                Col4 = null,
+                Col4 = new[] { null, "Created" },
                 Items = new EitemDto[] 
 				{
 					new() { Fid = "Id" },
@@ -21,8 +21,10 @@ namespace BaoAdm.Services
                     new() { Fid = "Name" },
 					new() { Fid = "Phone" },
 					new() { Fid = "Email" },
-					new() { Fid = "IsCorp" },
-					new() { Fid = "Created" },
+                    new() { Fid = "Status" },
+                    new() { Fid = "IsCorp" },
+                    new() { Fid = "Address" },
+                    new() { Fid = "Created" },
                 },
             };
         }

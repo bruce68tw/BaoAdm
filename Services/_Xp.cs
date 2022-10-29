@@ -15,7 +15,7 @@ namespace BaoAdm.Services
     {
         //public const string SiteVer = "20201228f";     //for my.js/css
         public static string MyVer = _Date.NowSecStr(); //for my.js/css
-        public const string LibVer = "20210712b";       //for lib.js/css
+        public const string LibVer = "20221025c";       //for lib.js/css
 
         public static string NoImagePath = _Fun.DirRoot + "/wwwroot/image/noImage.jpg";
 

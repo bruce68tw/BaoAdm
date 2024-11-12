@@ -5,7 +5,7 @@ namespace BaoAdm.Models
 {
     public class ErrorViewModel
     {
-        public string RequestId { get; set; }
+        public string RequestId { get; set; } = "";
 
         public bool ShowRequestId => !_Str.IsEmpty(RequestId);
     }

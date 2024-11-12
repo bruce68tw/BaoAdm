@@ -1,6 +1,7 @@
 using BaoAdm.Services;
 using Base.Enums;
 using Base.Models;
+using Base.Interfaces;
 using Base.Services;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Builder;
@@ -43,7 +44,7 @@ namespace BaoAdm
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //3.user info for base component
-            services.AddSingleton<IBaseUserService, MyBaseUserService>();
+            services.AddSingleton<IBaseUserSvc, MyBaseUserService>();
             //services.AddSingleton<IBaseUserService, BaseUserService>();
 
             //4.ado.net for mssql

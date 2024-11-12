@@ -3,7 +3,7 @@ using Base.Services;
 
 namespace BaoAdm.Services
 {
-    public class UserCustEdit : XgEdit
+    public class UserCustEdit : BaseEditSvc
     {
         public UserCustEdit(string ctrl) : base(ctrl) { }
 
@@ -13,7 +13,7 @@ namespace BaoAdm.Services
             {
 				Table = "dbo.[UserCust]",
                 PkeyFid = "Id",
-                Col4 = new[] { null, "Created" },
+                Col4 = new[] { "", "Created" },
                 Items = new EitemDto[] 
 				{
 					new() { Fid = "Id" },

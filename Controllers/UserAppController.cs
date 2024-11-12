@@ -1,14 +1,14 @@
-﻿using Base.Models;
+﻿using BaoAdm.Services;
+using Base.Models;
+using BaseApi.Attributes;
 using BaseApi.Controllers;
-using BaoAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using BaseWeb.Attributes;
 
 namespace BaoAdm.Controllers
 {
     [XgLogin]
-    public class UserAppController : ApiCtrl
+    public class UserAppController : BaseCtrl
     {
         public ActionResult Read()
         {

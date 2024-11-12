@@ -10,23 +10,23 @@ namespace BaoAdm.Services
     public static class _XpCode
     {
         #region master table to codes
-        public static async Task<List<IdStrDto>> GetProjectsA(Db db = null)
+        public static async Task<List<IdStrDto>> GetProjectsA(Db? db = null)
         {
-            return await TableToListA("Project", db);
+            return await ByTableA("Project", db);
         }
-        public static async Task<List<IdStrDto>> GetUsersA(Db db = null)
+        public static async Task<List<IdStrDto>> GetUsersA(Db? db = null)
         {
-            return await TableToListA("User", db);
+            return await ByTableA("User", db);
         }
-        public static async Task<List<IdStrDto>> GetDeptsA(Db db = null)
+        public static async Task<List<IdStrDto>> GetDeptsA(Db? db = null)
         {
-            return await TableToListA("Dept", db);
+            return await ByTableA("Dept", db);
         }
-        public static async Task<List<IdStrDto>> GetRolesA(Db db = null)
+        public static async Task<List<IdStrDto>> GetRolesA(Db? db = null)
         {
-            return await TableToListA("XpRole", db);
+            return await ByTableA("XpRole", db);
         }
-        public static async Task<List<IdStrDto>> GetProgsA(Db db = null)
+        public static async Task<List<IdStrDto>> GetProgsA(Db? db = null)
         {
             //return TableToList("XpProg", db);
             var sql = @"
@@ -34,18 +34,18 @@ select
     Id, (case when AuthRow=1 then '*' else '' end)+Name as Str
 from dbo.XpProg
 order by Id";
-            return await _Db.SqlToCodesA(sql, db);
+            return await BySqlA(sql, db);
         }
-        public static async Task<List<IdStrDto>> GetFlowsA(Db db = null)
+        public static async Task<List<IdStrDto>> GetFlowsA(Db? db = null)
         {
-            return await TableToListA("XpFlow", db);
+            return await ByTableA("XpFlow", db);
         }
         #endregion
 
         #region get from XpCode table
-        public static async Task<List<IdStrDto>> GetLaunchStatusesA(Db db = null)
+        public static async Task<List<IdStrDto>> GetLaunchStatusesA(Db? db = null)
         {
-            return await TypeToListA("LaunchStatus", db);
+            return await ByTypeA("LaunchStatus", db);
         }
         #endregion
 
@@ -66,7 +66,13 @@ order by Id";
         }
         #endregion
 
-        private static async Task<List<IdStrDto>> TableToListA(string table, Db db = null)
+        public static async Task<List<IdStrDto>> BySqlA(string sql, Db? db = null)
+        {
+            return await _Db.SqlToCodesA(sql, db) ?? new() ;
+        }
+
+        //傳回非null方便前端使用
+        private static async Task<List<IdStrDto>> ByTableA(string table, Db? db = null)
         {
             var sql = string.Format(@"
 select 
@@ -74,12 +80,12 @@ select
 from dbo.[{0}]
 order by Id
 ", table);
-            return await _Db.SqlToCodesA(sql, db);
+            return await _Db.SqlToCodesA(sql, db) ?? new();
         }
 
         /*
         //get codes from sql 
-        private static async Task<List<IdStrDto>> SqlToListAsync(string sql, Db db = null)
+        private static async Task<List<IdStrDto>> SqlToListAsync(string sql, Db? db = null)
         {
             var emptyDb = false;
             _Fun.CheckOpenDb(ref db, ref emptyDb);
@@ -91,7 +97,7 @@ order by Id
         */
 
         //get code table rows
-        private static async Task<List<IdStrDto>> TypeToListA(string type, Db db = null)
+        private static async Task<List<IdStrDto>> ByTypeA(string type, Db? db = null)
         {
             var sql = $@"
 select 
@@ -99,7 +105,7 @@ select
 from dbo.XpCode
 where Type='{type}'
 order by Sort";
-            return await _Db.SqlToCodesA(sql, db);
+            return await _Db.SqlToCodesA(sql, db) ?? new();
         }
 
     }//class

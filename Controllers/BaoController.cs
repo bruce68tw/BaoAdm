@@ -2,14 +2,14 @@
 using Base.Models;
 using Base.Services;
 using BaseApi.Controllers;
-using BaseWeb.Attributes;
+using BaseApi.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BaoAdm.Controllers
 {
     [XgLogin]
-    public class BaoController : ApiCtrl
+    public class BaoController : BaseCtrl
     {
         public async Task<ActionResult> Read()
         {
@@ -43,7 +43,7 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(await EditService().UpdateA(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json)!));
         }
 
     }//class

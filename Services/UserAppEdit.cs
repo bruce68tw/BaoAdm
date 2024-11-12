@@ -3,7 +3,7 @@ using Base.Services;
 
 namespace BaoAdm.Services
 {
-    public class UserAppEdit : XgEdit
+    public class UserAppEdit : BaseEditSvc
     {
         public UserAppEdit(string ctrl) : base(ctrl) { }
 

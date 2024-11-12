@@ -2,14 +2,14 @@
 using Base.Models;
 using Base.Services;
 using BaseApi.Controllers;
-using BaseWeb.Attributes;
+using BaseApi.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BaoAdm.Controllers
 {
     [XgLogin]
-    public class UserCustController : ApiCtrl
+    public class UserCustController : BaseCtrl
     {
         public ActionResult Read()
         {
@@ -37,13 +37,13 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(string json)
         {
-            return Json(await EditService().CreateA(_Str.ToJson(json)));
+            return Json(await EditService().CreateA(_Str.ToJson(json)!));
         }
 
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(await EditService().UpdateA(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json)!));
         }
 
         [HttpPost]

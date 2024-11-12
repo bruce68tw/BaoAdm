@@ -2,9 +2,9 @@
 using BaoAdm.Models;
 using Base.Models;
 using Base.Services;
+using BaseApi.Attributes;
 using BaseApi.Services;
-using BaseWeb.Attributes;
-using BaseWeb.Extensions;
+using BaseApi.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -55,10 +55,10 @@ where Account=@Account
 ";
             var status = false;
             var hasPwd = !_Str.IsEmpty(vo.Pwd);
-            var row = await _Db.GetJsonA(sql, new List<object>() { "Account", vo.Account });
+            var row = await _Db.GetRowA(sql, new List<object>() { "Account", vo.Account });
             if (row != null)
             {
-                var dbPwd = row["Pwd"].ToString();
+                var dbPwd = row["Pwd"]!.ToString();
                 status = (!hasPwd && dbPwd == "") ||
                     (hasPwd && dbPwd == _Str.Md5(vo.Pwd));
             }
@@ -70,15 +70,15 @@ where Account=@Account
             #endregion
 
             var userType = (!hasPwd) ? UserTypeEstr.NoPwd :
-                row["IsAdmin"].ToString() == "1" ? UserTypeEstr.Admin :
+                row!["IsAdmin"]!.ToString() == "1" ? UserTypeEstr.Admin :
                 UserTypeEstr.Normal;
 
             #region 3.set base user info
-            var userId = row["UserId"].ToString();
+            var userId = row!["UserId"]!.ToString();
             var userInfo = new BaseUserDto()
             {
                 UserId = userId,
-                UserName = row["UserName"].ToString(),
+                UserName = row!["UserName"]!.ToString(),
                 //DeptId = "",
                 //DeptName = "",
                 Locale = _Fun.Config.Locale,
@@ -89,7 +89,7 @@ where Account=@Account
             #endregion
 
             //4.set session of base user info
-            _Http.GetSession().Set(_Fun.BaseUser, userInfo);   //extension method
+            _Http.GetSession().Set(_Fun.FidBaseUser, userInfo);   //extension method
 
             //5.redirect if need
             var url = _Str.IsEmpty(vo.FromUrl) ? "/Home/Index" : vo.FromUrl;

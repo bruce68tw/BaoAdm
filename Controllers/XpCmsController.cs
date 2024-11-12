@@ -1,33 +1,32 @@
-﻿using Base.Models;
-using Base.Services;
-using BaseApi.Services;
-using BaseApi.Controllers;
-using BaoAdm.Models;
+﻿using BaoAdm.Models;
 using BaoAdm.Services;
+using Base.Models;
+using Base.Services;
+using BaseApi.Controllers;
+using BaseApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using BaseWeb.Services;
 
 namespace BaoAdm.Controllers
 {
     //CMS base controller, abstract class
-    abstract public class XpCmsController : ApiCtrl 
+    abstract public class XpCmsController : BaseCtrl 
     {
         /// <summary>
         /// map to CmsTypeEstr
         /// </summary>
-        public string CmsType;
+        public string CmsType = "";
 
         /// <summary>
         /// for FileName input field
         /// </summary>
-        public string DirUpload;    //upload dir, no right slash
+        public string DirUpload = "";    //upload dir, no right slash
 
         /// <summary>
         /// cms edit model
         /// </summary>
-        public CmsEditDto EditDto;
+        public CmsEditDto EditDto = null!;
 
         //use shared view
         public ActionResult Read()
@@ -53,18 +52,18 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().CreateAsnyc(_Str.ToJson(json), t0_FileName, DirUpload, CmsType));
+            return Json(await EditService().CreateAsnyc(_Str.ToJson(json)!, t0_FileName, DirUpload, CmsType));
         }
 
         //by dirUpload
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json), t0_FileName, DirUpload));
+            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json)!, t0_FileName, DirUpload));
         }
 
         //by cmsType
-        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult?> ViewFile(string table, string fid, string key, string ext)
         {
             return await _Xp.ViewCmsTypeAsync(fid, key, ext, CmsType);
         }
@@ -95,7 +94,7 @@ namespace BaoAdm.Controllers
         public async Task<string> SetHtmlImage(IFormFile file)
         {
             var subDir = "image/Cms" + CmsType;
-            var fileName = await _WebFile.SaveHtmlImageA(file, $"{_Web.DirWeb}{subDir}");
+            var fileName = await _HttpFile.SaveFileByNewIdA(file, $"{_FunApi.DirWeb}{subDir}");
             return _Fun.GetHtmlImageUrl($"{subDir}/{fileName}");
         }
 

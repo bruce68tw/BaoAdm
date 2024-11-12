@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace BaoAdm.Services
 {
-    public class BaoEdit : XgEdit
+    public class BaoEdit : BaseEditSvc
     {
         public BaoEdit(string ctrl) : base(ctrl) { }
 
-        private string _key;
+        private string _userId = "";
+        private string _key = "" ;
 
         override public EditDto GetDto()
         {
             return new EditDto
             {
-                ReadSql = "select * from dbo.Bao where Id='{0}'",
+                ReadSql = "select * from dbo.Bao where Id=@Id",
                 Table = "dbo.[Bao]",
                 PkeyFid = "Id",
-                Col4 = new string[] { null, null, null, "Revised" },
+                Col4 = new string[] { "", "", "", "Revised" },
                 Items = new EitemDto[] 
 				{
 					new() { Fid = "Id" },
@@ -31,13 +32,14 @@ namespace BaoAdm.Services
         override public async Task<ResultDto> UpdateA(string key, JObject json)
         {
             _key = key;
-            return await EditService().UpdateA(key, json, fnAfterSave: AfterUpdateA);
+            _userId = _Fun.UserId();
+            return await EditService().UpdateA(key, json, fnAfterSaveA: AfterUpdateA);
         }
 
-        private async Task<string> AfterUpdateA(Db db, JObject keyJson)
+        private async Task<string> AfterUpdateA(CrudEditSvc editService, Db db, JObject keyJson)
         {
             var key = RedisTypeEstr.BaoDetail + _key;
-            await _Redis.DeleteKeyA(key);
+            _Cache.DeleteKey(_userId, key);
             return "";
         }
 

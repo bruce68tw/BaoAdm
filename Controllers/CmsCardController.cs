@@ -1,7 +1,7 @@
 ﻿using BaoAdm.Models;
 using BaoAdm.Services;
 using BaoLib.Enums;
-using BaseWeb.Attributes;
+using BaseApi.Attributes;
 
 namespace BaoAdm.Controllers
 {

@@ -5,7 +5,8 @@
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>D:\_projectRun\BaoAdm</_PublishTargetUrl>
-    <History>True|2022-03-11T01:01:00.7879107Z;</History>
+    <_PublishTargetUrl>c:\_projectRun\BaoAdm</_PublishTargetUrl>
+    <History>True|2024-11-17T04:38:00.9039007Z||;True|2022-03-11T09:01:00.7879107+08:00||;</History>
+    <LastFailureDetails />
   </PropertyGroup>
 </Project>

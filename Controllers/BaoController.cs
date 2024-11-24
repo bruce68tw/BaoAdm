@@ -1,8 +1,9 @@
 ﻿using BaoAdm.Services;
+using BaoLib.Services;
 using Base.Models;
 using Base.Services;
-using BaseApi.Controllers;
 using BaseApi.Attributes;
+using BaseApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -13,7 +14,11 @@ namespace BaoAdm.Controllers
     {
         public async Task<ActionResult> Read()
         {
-            ViewBag.LaunchStatuses = await _XpCode.GetLaunchStatusesA();
+            await using (var db = new Db()) {
+                ViewBag.LaunchStatuses = await _XpLibCode.LaunchStatusesA(db);
+                ViewBag.AnswerTypes = await _XpLibCode.AnswerTypesA(db);
+                ViewBag.PrizeTypes = await _XpLibCode.PrizeTypesA(db);
+            }
             return View();
         }
 

@@ -65,6 +65,7 @@
     <None Remove="Controllers\UserController.cs%281%29" />
     <None Remove="Controllers\UserController.cs%282%29" />
     <None Remove="Models\LoginVo.cs_old" />
+    <None Remove="Services\_XpCode.cs_old" />
     <None Remove="_image\noImage.jpg" />
   </ItemGroup>
 

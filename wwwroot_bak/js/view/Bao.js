@@ -8,7 +8,7 @@
                 { data: 'StartTime' },
                 { data: 'EndTime' },
                 { data: 'IsMove' },
-                { data: 'AnswerTypeName' },
+                { data: 'ReplyTypeName' },
                 { data: 'PrizeTypeName' },
                 { data: 'PrizeNote' },
                 { data: 'StageCount' },

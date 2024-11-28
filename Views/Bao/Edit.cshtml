@@ -7,7 +7,7 @@
     @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "上架狀態", Fid = "LaunchStatus", Required = true, Rows = ViewBag.LaunchStatuses })
     @await Component.InvokeAsync("XiCheck", new XiCheckDto { Title = "資料狀態", Fid = "Status", Label = "啟用", Edit="C" })
     @await Component.InvokeAsync("XiCheck", new XiCheckDto { Title = "是否移動地點", Fid = "IsMove", Label = "是", Edit = "C" })
-    @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "答題方式", Fid = "AnswerType", Required = true, Edit = "C", Rows = ViewBag.AnswerTypes })
+    @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "答題方式", Fid = "ReplyType", Required = true, Edit = "C", Rows = ViewBag.ReplyTypes })
     @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "獎項種類", Fid = "PrizeType", Edit = "C", Rows = ViewBag.PrizeTypes })
     @await Component.InvokeAsync("XiRead", new XiReadDto { Title = "獎項說明", Fid = "PrizeNote" })
     @await Component.InvokeAsync("XiTextarea", new XiTextareaDto { Title = "注意事項", Fid = "Note", MaxLen = 500, Cols = "2,6", Edit="C" })

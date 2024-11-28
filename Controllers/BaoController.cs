@@ -16,7 +16,7 @@ namespace BaoAdm.Controllers
         {
             await using (var db = new Db()) {
                 ViewBag.LaunchStatuses = await _XpLibCode.LaunchStatusesA(db);
-                ViewBag.AnswerTypes = await _XpLibCode.AnswerTypesA(db);
+                ViewBag.ReplyTypes = await _XpLibCode.ReplyTypesA(db);
                 ViewBag.PrizeTypes = await _XpLibCode.PrizeTypesA(db);
             }
             return View();

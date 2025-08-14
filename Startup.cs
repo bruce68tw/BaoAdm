@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using BaseApi.Services;
 
 namespace BaoAdm
 {
@@ -70,7 +71,7 @@ namespace BaoAdm
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //1.initial & set locale
-            _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql);
+            _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql, AuthTypeEnum.None, false);
 
             //2.set default locale
             _Locale.SetCultureA(_Fun.Config.Locale);

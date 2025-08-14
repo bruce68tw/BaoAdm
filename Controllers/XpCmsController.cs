@@ -52,14 +52,14 @@ namespace BaoAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().CreateAsnyc(_Str.ToJson(json)!, t0_FileName, DirUpload, CmsType));
+            return Json(await EditService().CreateA(_Str.ToJson(json)!, t0_FileName, DirUpload, CmsType));
         }
 
         //by dirUpload
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json)!, t0_FileName, DirUpload));
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json)!, t0_FileName, DirUpload));
         }
 
         //by cmsType

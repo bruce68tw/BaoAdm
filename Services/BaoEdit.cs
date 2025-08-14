@@ -33,15 +33,19 @@ namespace BaoAdm.Services
         {
             _key = key;
             _userId = _Fun.UserId();
-            return await EditService().UpdateA(key, json, fnAfterSaveA: AfterUpdateA);
+            //todo: 暫時移除 fnAfterSaveA
+            //return await EditSvc().UpdateA(key, json, fnAfterSaveA: AfterUpdateA);
+            return await EditSvc().UpdateA(key, json);
         }
 
+        /* temp remark
         private async Task<string> AfterUpdateA(CrudEditSvc editService, Db db, JObject keyJson)
         {
             var key = RedisTypeEstr.BaoDetail + _key;
             _Cache.DeleteKey(_userId, key);
             return "";
         }
+        */
 
     } //class
 }

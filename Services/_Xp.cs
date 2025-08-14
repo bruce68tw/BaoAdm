@@ -115,7 +115,7 @@ namespace BaoAdm.Services
         /// <returns></returns>
         public static string GetLocale0()
         {
-            return _Locale.GetLocaleByUser(false);
+            return _Locale.GetLocale(false);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace BaoAdm.Services
         {
             var dir = DirTpl;
             if (hasLocale)
-                dir += _Locale.GetLocaleByUser() + "/";
+                dir += _Locale.GetLocale() + "/";
 
             return dir + fileName;
         }
